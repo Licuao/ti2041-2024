@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  {% load static %}
+  <meta charset="UTF-8">
+  <title>Producto Registrado</title>
+  <link rel="stylesheet" href="{% static 'productos/styles.css' %}">
+  <script src="{% static 'productos/main.js'%}" defer></script>
+</head>
+
+<body>
+  <section class="resultado">
+    <h1>Producto registrado con éxito!!!</h1>
+    <div class="divcito">
+      <p>Codigo: {{ productos.codigo}}</p>
+      <p>Nombre: {{ productos.nombre}}</p>
+      <p>Marca: {{ productos.marca}}</p>
+      <p>Fecha de vencimiento: {{ productos.fecha_vencimiento}}</p>
+    </div>
+    <a class="bt-a" href="{% url 'consulta' %}">Volver a la lista de productos</a>
+    <canvas id="canvas"></canvas>
+  </section>
+</body>
+
+</html>

@@ -1,12 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  <h1>Registro</h1>
-  <a href=""></a>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Registro de Producto{% endblock %}
+
+{% block content %}
+<section class="registro">
+  <h1>Registrar Producto</h1>
+  <form method="post">
+    {% csrf_token %}
+    <label for="codigo">Código:</label>
+    <input type="text" name="codigo" required><br>
+
+    <label for="nombre">Nombre:</label>
+    <input type="text" name="nombre" required><br>
+
+    <label for="marca">Marca:</label>
+    <input type="text" name="marca" required><br>
+
+    <label for="fecha_vencimiento">Fecha de Vencimiento:</label>
+    <input type="date" name="fecha_vencimiento" required><br>
+
+    <input class='bt-a' type="submit" value="Registrar">
+  </form>
+</section>
+{% endblock %}
