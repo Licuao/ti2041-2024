@@ -1,0 +1,46 @@
+<!-- templates/productos/lista.html -->
+{% extends 'base.html' %}
+
+{% block title %}Lista de Productos{% endblock %}
+
+{% block content %}
+<h2>Productos</h2>
+<form method="GET">
+    <input type="text" name="marca" placeholder="Buscar por marca">
+    <input type="text" name="categoria" placeholder="Buscar por categoría">
+    <input type="text" name="caracteristica" placeholder="Buscar por característica">
+    <button type="submit">Filtrar</button>
+</form>
+<table>
+    <tr>
+        <th>Nombre</th>
+        <th>Precio</th>
+        <th>Marca</th>
+        <th>Categoría</th>
+        <th>Acciones</th>
+    </tr>
+    {% for producto in productos %}
+    <tr>
+        <td>{{ producto.nombre }}</td>
+        <td>{{ producto.precio }}</td>
+        <td>{{ producto.marca }}</td>
+        <td>{{ producto.categoria.nombre }}</td>
+        <td>
+            <a href="{% url 'editar_producto' producto.id %}">Editar</a>
+            <form action="{% url 'eliminar_producto' producto.id %}" method="POST" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit">Eliminar</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
+
+<!-- Filtros en lista.html -->
+<form method="GET">
+  <input type="text" name="marca" placeholder="Buscar por marca">
+  <input type="text" name="categoria" placeholder="Buscar por categoría">
+  <input type="text" name="caracteristica" placeholder="Buscar por característica">
+  <button type="submit">Filtrar</button>
+</form>
