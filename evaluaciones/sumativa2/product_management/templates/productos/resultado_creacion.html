@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Producto Creado{% endblock %}
+
+{% block content %}
+<h1>Producto Creado Exitosamente</h1>
+
+<div>
+    <h2>Detalles del Producto:</h2>
+    <p><strong>Código:</strong> {{ producto.codigo }}</p>
+    <p><strong>Nombre:</strong> {{ producto.nombre }}</p>
+    <p><strong>Precio:</strong> ${{ producto.precio }}</p>
+    <p><strong>Categoría:</strong> {{ producto.categoria|default:"N/A" }}</p>
+    <p><strong>Marca:</strong> {{ producto.marca|default:"N/A" }}</p>
+</div>
+
+<div>
+    <h3>Características:</h3>
+    <ul>
+        {% for caracteristica in producto.caracteristicas.all %}
+        <li>{{ caracteristica.tipo }}: {{ caracteristica.valor }}</li>
+        {% empty %}
+        <li>Sin características</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div>
+    <a href="{% url 'lista_productos' %}" class="btn">Volver a la Lista de Productos</a>
+</div>
+{% endblock %}
