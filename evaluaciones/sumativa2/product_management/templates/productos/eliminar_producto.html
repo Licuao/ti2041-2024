@@ -9,7 +9,7 @@
 
 <form method="post">
     {% csrf_token %}
-    <button type="submit" class="btn btn-delete">Confirmar Eliminación</button>
-    <a href="{% url 'lista_productos' %}" class="btn">Cancelar</a>
+    <button  type="submit" class="btn btn-delete">Confirmar Eliminación</button>
+    <a class="btn btn-edit" href="{% url 'lista_productos' %}" class="btn">Cancelar</a>
 </form>
 {% endblock %}
