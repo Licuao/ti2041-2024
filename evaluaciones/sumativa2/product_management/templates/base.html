@@ -9,17 +9,19 @@
     <link rel="stylesheet" href="{% static 'productos/styles.css' %}">
 </head>
 <body>
+  <header>
+    <h4>Gestión de productos</h4>
+  </header>
     {% if user.is_authenticated %}
-    <nav class="bg-white shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <h1 class="text-xl font-semibold">Sistema de Productos</h1>
+    <nav>
+        <div>
+            <div>
+                <div>
+                    <h1>Sistema de Productos</h1>
                 </div>
-                <div class="flex items-center">
-                    <span class="mr-4">{{ user.username }}</span>
-                    <a href="{% url 'logout' %}" 
-                       class="inline-flex items-center px-4 py-2 text-gray-700 hover:text-gray-900">
+                <div>
+                    <span> {{ user.username }}</span>
+                    <a href="{% url 'logout' %}">
                         Cerrar Sesión
                     </a>
                 </div>
@@ -27,8 +29,11 @@
         </div>
     </nav>
     {% endif %}
-
     {% block content %}
+
     {% endblock %}
+    <footer>
+      <p>© 2024 Gestión de Productos S.A. Todos los derechos reservados.</p>
+    </footer>
 </body>
 </html>
