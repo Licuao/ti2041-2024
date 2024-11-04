@@ -1,8 +1,30 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.forms import inlineformset_factory
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from .models import Producto, Caracteristica, Categoria, Marca
+from django.contrib import messages
 from .forms import ProductoForm, CaracteristicaFormSet
 
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        
+        if user is not None:
+            login(request, user)
+            return redirect('lista_productos')
+        else:
+            messages.error(request, 'Credenciales inválidas')
+    
+    return render(request, 'productos/login.html')
+
+def logout_view(request):
+    logout(request)
+    return redirect('login')
+
+@login_required(login_url='login')
 def lista_productos(request):
     productos = Producto.objects.all()
     categorias = Categoria.objects.all()
@@ -23,6 +45,7 @@ def lista_productos(request):
     }
     return render(request, 'productos/lista_productos.html', context)
 
+@login_required(login_url='login')
 def crear_producto(request):
     if request.method == 'POST':
         form = ProductoForm(request.POST)
@@ -40,8 +63,10 @@ def crear_producto(request):
         'form': form,
         'caracteristica_formset': caracteristica_formset,
     })
+    return render(request, 'productos/crear_producto.html')
 
-def editar_producto(request, producto_id):
+@login_required(login_url='login')
+def editar_producto(request):
     producto = get_object_or_404(Producto, id=producto_id)
     if request.method == 'POST':
         form = ProductoForm(request.POST, instance=producto)
@@ -61,13 +86,10 @@ def editar_producto(request, producto_id):
         'producto': producto,
     })
 
+@login_required(login_url='login')
 def eliminar_producto(request, producto_id):
     producto = get_object_or_404(Producto, id=producto_id)
     if request.method == 'POST':
         producto.delete()
         return redirect('lista_productos')
     return render(request, 'productos/eliminar_producto.html', {'producto': producto})
-
-def resultado_creacion(request, producto_id):
-    producto = get_object_or_404(Producto, id=producto_id)
-    return render(request, 'productos/resultado_creacion.html', {'producto': producto})
