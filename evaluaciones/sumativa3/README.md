@@ -10,7 +10,7 @@ Luego de confeccionar el prototipo para los datos de "Gestión de Productos S.A.
 
 Crear los modelos necesarios que le permitan administrar los productos, considerando que: 
 El producto tiene código, nombre, y precio.
-El producto tiene un conjunto de características (tamaño, peso, etc).
+El  producto tiene un conjunto de características (tamaño, peso, etc).
 El producto puede tener una categoría.
 El producto debe tener una marca (y que se puede repetir entre productos).
 Permitir que toda la administración de Categorías, Marcas y Características (solo los tipos) sean parte del administrador de Django.
