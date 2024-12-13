@@ -1,8 +1,9 @@
 from pathlib import Path
+from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-(8oh*f78b6tbs)(m%f0le*yp&7v2ff-thq855pfms^8kr#h!h9'
+SECRET_KEY = 'django-insecure-(tu-secret-key)'
 
 DEBUG = True
 
@@ -16,6 +17,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'productos',
+    'ninja',
 ]
 
 MIDDLEWARE = [
@@ -33,7 +35,7 @@ ROOT_URLCONF = 'gestionAPP.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'productos' / 'templates'],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -71,19 +73,31 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 LANGUAGE_CODE = 'es'
-
 TIME_ZONE = 'America/Santiago'
-
 USE_I18N = True
-
 USE_TZ = True
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
-
-# Configuración de autenticación
-LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'consulta_productos'
-LOGOUT_REDIRECT_URL = 'login'
+STATICFILES_DIRS = [BASE_DIR / 'productos' / 'static']
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Configuración de login
+LOGIN_URL = 'productos:login'
+LOGIN_REDIRECT_URL = 'productos:consulta_productos'
+LOGOUT_REDIRECT_URL = 'productos:login'
+
+# gestionAPP/settings.py
+
+# Agrega al final del archivo
+NINJA_JWT = {
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+    'TOKEN_LIFETIME': timedelta(days=1),
+    'TOKEN_REFRESH_LIFETIME': timedelta(days=7),
+}
+
+JWT_SECRET = 'tu-clave-secreta-aqui'
+

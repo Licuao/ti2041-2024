@@ -1,144 +1,49 @@
-{% extends "base.html" %}
+{% extends "productos/base.html" %}
+
+{% block title %}Registro de Producto{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="header-actions">
-        <h2>Registro de Producto</h2>
-        <a href="{% url 'consulta_productos' %}" class="btn btn-secondary">Ver Productos Registrados</a>
-    </div>
+<div class="form-container">
+    <div class="card">
+        <h2>{{ titulo }}</h2>
+        <form method="post">
+            {% csrf_token %}
+            
+            {% for field in form %}
+            <div class="form-group {% if field.errors %}has-error{% endif %}">
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.errors %}
+                <span class="error-message">{{ field.errors.0 }}</span>
+                {% endif %}
+            </div>
+            {% endfor %}
 
-    <div class="form-container">
-        <div class="form-card">
-            <form method="post" class="product-form">
-                {% csrf_token %}
-                
-                <div class="form-grid">
-                    <div class="form-group {% if form.codigo.errors %}has-error{% endif %}">
-                        <label for="id_codigo">Código:</label>
-                        <input type="text" name="codigo" id="id_codigo" value="{{ form.codigo.value|default:'' }}" required>
-                        {% if form.codigo.errors %}
-                            {% for error in form.codigo.errors %}
-                                <span class="error-message">{{ error }}</span>
-                            {% endfor %}
-                        {% endif %}
-                    </div>
-
-                    <div class="form-group {% if form.nombre.errors %}has-error{% endif %}">
-                        <label for="id_nombre">Nombre:</label>
-                        <input type="text" name="nombre" id="id_nombre" value="{{ form.nombre.value|default:'' }}" required>
-                        {% if form.nombre.errors %}
-                            {% for error in form.nombre.errors %}
-                                <span class="error-message">{{ error }}</span>
-                            {% endfor %}
-                        {% endif %}
-                    </div>
-
-                    <div class="form-group {% if form.precio.errors %}has-error{% endif %}">
-                        <label for="id_precio">Precio:</label>
-                        <input type="number" name="precio" id="id_precio" step="0.01" value="{{ form.precio.value|default:'' }}" required>
-                        {% if form.precio.errors %}
-                            {% for error in form.precio.errors %}
-                                <span class="error-message">{{ error }}</span>
-                            {% endfor %}
-                        {% endif %}
-                    </div>
-
-                    <div class="form-group {% if form.marca.errors %}has-error{% endif %}">
-                        <label for="id_marca">Marca:</label>
-                        {{ form.marca }}
-                        {% if form.marca.errors %}
-                            {% for error in form.marca.errors %}
-                                <span class="error-message">{{ error }}</span>
-                            {% endfor %}
-                        {% endif %}
-                    </div>
-
-                    <div class="form-group {% if form.categoria.errors %}has-error{% endif %}">
-                        <label for="id_categoria">Categoría:</label>
-                        {{ form.categoria }}
-                        {% if form.categoria.errors %}
-                            {% for error in form.categoria.errors %}
-                                <span class="error-message">{{ error }}</span>
-                            {% endfor %}
-                        {% endif %}
-                    </div>
-                </div>
-
-                <div class="caracteristicas-section">
-                    <h3>Características</h3>
-                    {{ formset.management_form }}
-                    <div class="caracteristicas-grid">
-                        {% for caracteristica_form in formset %}
-                            <div class="caracteristica-item">
-                                {{ caracteristica_form.id }}
-                                <div class="form-group {% if caracteristica_form.caracteristica.errors %}has-error{% endif %}">
-                                    <label>Característica:</label>
-                                    {{ caracteristica_form.caracteristica }}
-                                    {% if caracteristica_form.caracteristica.errors %}
-                                        {% for error in caracteristica_form.caracteristica.errors %}
-                                            <span class="error-message">{{ error }}</span>
-                                        {% endfor %}
-                                    {% endif %}
-                                </div>
-                                <div class="form-group {% if caracteristica_form.valor.errors %}has-error{% endif %}">
-                                    <label>Valor:</label>
-                                    {{ caracteristica_form.valor }}
-                                    {% if caracteristica_form.valor.errors %}
-                                        {% for error in caracteristica_form.valor.errors %}
-                                            <span class="error-message">{{ error }}</span>
-                                        {% endfor %}
-                                    {% endif %}
-                                </div>
-                            </div>
+            <div class="caracteristicas-section">
+                <h3>Características</h3>
+                {{ formset.management_form }}
+                <div class="caracteristicas-grid">
+                    {% for caracteristica_form in formset %}
+                    <div class="caracteristica-item">
+                        {% for field in caracteristica_form %}
+                        <div class="form-group {% if field.errors %}has-error{% endif %}">
+                            {{ field.label_tag }}
+                            {{ field }}
+                            {% if field.errors %}
+                            <span class="error-message">{{ field.errors.0 }}</span>
+                            {% endif %}
+                        </div>
                         {% endfor %}
                     </div>
+                    {% endfor %}
                 </div>
+            </div>
 
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">Guardar Producto</button>
-                    <a href="{% url 'consulta_productos' %}" class="btn btn-secondary">Cancelar</a>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <div class="productos-list">
-        <h3>Productos Registrados</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Código</th>
-                    <th>Nombre</th>
-                    <th>Marca</th>
-                    <th>Categoría</th>
-                    <th>Precio</th>
-                    <th>Fecha de Ingreso</th>
-                    <th>Fecha de Modificación</th>
-                    {% if es_admin %}
-                    <th>Acciones</th>
-                    {% endif %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for producto in productos %}
-                    <tr>
-                        <td>{{ producto.codigo }}</td>
-                        <td>{{ producto.nombre }}</td>
-                        <td>{{ producto.marca.nombre }}</td>
-                        <td>{{ producto.categoria.nombre }}</td>
-                        <td>{{ producto.precio }}</td>
-                        <td>{{ producto.fecha_ingreso }}</td>
-                        <td>{{ producto.fecha_modificacion }}</td>
-                        {% if es_admin %}
-                        <td>
-                            <a href="{% url 'editar_producto' producto.id %}" class="btn btn-edit">Editar</a>
-                            <a href="{% url 'eliminar_producto' producto.id %}" class="btn btn-delete">Eliminar</a>
-                        </td>
-                        {% endif %}
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                <a href="{% url 'productos:consulta_productos' %}" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
     </div>
 </div>
 {% endblock %}
